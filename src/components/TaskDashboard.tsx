@@ -4,9 +4,16 @@ import React, { Props, useState } from 'react';
 export interface Task {
   id: number;
   textTask: string;
+  checkedTask: boolean;
 }
 
-function TaskDashboard({ tasks, handleAddTask }: any) {
+function TaskDashboard({
+  tasks,
+  handleAddTask,
+  handleEditSave,
+  handleChangeCheckBox,
+  useEdit,
+}: any) {
   return (
     <>
       <div className="filters btn-group stack-exception">
@@ -35,7 +42,12 @@ function TaskDashboard({ tasks, handleAddTask }: any) {
           {tasks.map((task: Task) => {
             return (
               <div className="c-cb">
-                <input id={task.id.toString()} type="checkbox" />
+                <input
+                  id={task.id.toString()}
+                  type="checkbox"
+                  onClick={() => handleChangeCheckBox(task.id)}
+                  checked={task.checkedTask}
+                />
                 <label className="todo-label" htmlFor={task.id.toString()}>
                   {task.textTask}
                 </label>
@@ -43,8 +55,12 @@ function TaskDashboard({ tasks, handleAddTask }: any) {
             );
           })}
           <div className="btn-group">
-            <button type="button" className="btn">
-              save
+            <button
+              type="button"
+              className="btn"
+              onClick={() => handleEditSave()}
+            >
+              {useEdit ? 'Save' : 'Edit'}
               <span className="visually-hidden" />
             </button>
             <button type="button" className="btn btn__danger">
