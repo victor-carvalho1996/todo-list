@@ -1,5 +1,4 @@
-import { parse } from 'path';
-import React, { Props, useState } from 'react';
+import React from 'react';
 
 export interface Task {
   id: number;
@@ -9,7 +8,6 @@ export interface Task {
 
 function TaskDashboard({
   tasks,
-  handleAddTask,
   handleEditSave,
   handleChangeCheckBox,
   useEdit,
