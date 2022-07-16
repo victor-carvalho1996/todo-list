@@ -11,6 +11,7 @@ function TaskDashboard({
   handleEditSave,
   handleChangeCheckBox,
   useEdit,
+  handleDelete,
 }: any) {
   return (
     <>
@@ -61,7 +62,11 @@ function TaskDashboard({
               {useEdit ? 'Save' : 'Edit'}
               <span className="visually-hidden" />
             </button>
-            <button type="button" className="btn btn__danger">
+            <button
+              type="button"
+              className="btn btn__danger"
+              onClick={() => handleDelete()}
+            >
               Delete <span className="visually-hidden" />
             </button>
           </div>

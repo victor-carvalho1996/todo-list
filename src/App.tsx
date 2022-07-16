@@ -41,28 +41,34 @@ function App() {
     return resultTask;
   };
 
-  const allowChecked = (id: number) => {
-    let existTaskChecked = false;
+  const existTaskChecked = (id: number) => {
+    let haveTaskChecked = false;
 
     useListTask.forEach((task) => {
       if (task.checkedTask && id !== task.id) {
-        existTaskChecked = true;
+        haveTaskChecked = true;
+      }
+
+      if (task.checkedTask && !haveTaskChecked) {
+        setEditTask(-1);
       }
     });
 
-    return existTaskChecked;
+    return haveTaskChecked;
   };
 
   const handleChangeCheckBox = (id: number) => {
     const newList = [...useListTask];
 
-    const existTaskChecked = allowChecked(id);
+    const haveTaskChecked = existTaskChecked(id);
 
-    if (existTaskChecked || useEdit) return;
+    if (haveTaskChecked || useEdit) return;
 
     newList[id].checkedTask = !newList[id].checkedTask;
 
     setListTask(newList);
+
+    if (useEditTask === -1) setEditTask(id);
   };
 
   const handleSave = () => {
@@ -78,6 +84,8 @@ function App() {
     handleChangeCheckBox(useEditTask);
 
     setEditTask(-1);
+
+    setEdit(false);
   };
 
   const handleEdit = () => {
@@ -102,6 +110,32 @@ function App() {
     }
   };
 
+  const orderArray = (listTask: Task[]) => {
+    const newListTask = listTask;
+
+    for (let index = 0; index < listTask.length; index += 1) {
+      newListTask[index].id = index;
+    }
+
+    setListTask(listTask);
+
+    return newListTask;
+  };
+
+  const handleDelete = () => {
+    if (fetchTaskChecked() === undefined) return;
+
+    const newList = [...useListTask];
+
+    const listTask = newList.filter((task: Task) => task.id !== useEditTask);
+
+    setEditTask(-1);
+
+    const listTasksOrder = orderArray(listTask);
+
+    setListTask(listTasksOrder);
+  };
+
   return (
     <div className="todoapp stack-large">
       <Title />
@@ -116,6 +150,7 @@ function App() {
         handleEditSave={handleEditSave}
         handleChangeCheckBox={handleChangeCheckBox}
         useEdit={useEdit}
+        handleDelete={handleDelete}
       />
     </div>
   );
