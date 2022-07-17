@@ -3,22 +3,34 @@ import React from 'react';
 export interface Task {
   id: number;
   textTask: string;
-  checkedTask: boolean;
+  completeTask: boolean;
+}
+
+export enum TypeFilter {
+  All,
+  Complete,
 }
 
 function TaskDashboard({
   tasks,
-  handleEditSave,
+  handleSave,
   handleChangeCheckBox,
+  handleEditClick,
   useEdit,
   handleDelete,
+  handleChangeTypeFilter,
 }: any) {
   return (
     <>
       <div className="filters btn-group stack-exception">
         <button type="button" className="btn toggle-btn">
           <span className="visually-hidden">Show </span>
-          <button type="button">All</button>
+          <button
+            type="button"
+            onClick={() => handleChangeTypeFilter(TypeFilter.All)}
+          >
+            All
+          </button>
           <span className="visually-hidden"> tasks</span>
         </button>
         <button type="button" className="btn toggle-btn">
@@ -28,7 +40,12 @@ function TaskDashboard({
         </button>
         <button type="button" className="btn toggle-btn">
           <span className="visually-hidden">Show </span>
-          <button type="button">Complete</button>
+          <button
+            type="button"
+            onClick={() => handleChangeTypeFilter(TypeFilter.Complete)}
+          >
+            Complete
+          </button>
           <span className="visually-hidden"> tasks</span>
         </button>
       </div>
@@ -44,21 +61,20 @@ function TaskDashboard({
                 <input
                   id={task.id.toString()}
                   type="checkbox"
-                  onClick={() => handleChangeCheckBox(task.id)}
-                  checked={task.checkedTask}
+                  onChange={() => handleChangeCheckBox(task.id)}
+                  checked={task.completeTask}
                 />
-                <label className="todo-label" htmlFor={task.id.toString()}>
+                <label
+                  onDoubleClick={() => handleEditClick(task.id)}
+                  className="todo-label"
+                >
                   {task.textTask}
                 </label>
               </div>
             );
           })}
           <div className="btn-group">
-            <button
-              type="button"
-              className="btn"
-              onClick={() => handleEditSave()}
-            >
+            <button type="button" className="btn" onClick={() => handleSave()}>
               {useEdit ? 'Save' : 'Edit'}
               <span className="visually-hidden" />
             </button>

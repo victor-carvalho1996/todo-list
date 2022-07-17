@@ -1,113 +1,93 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import Title from './components/Title';
 import AddItemForm from './components/AddItemForm';
-import TaskDashboard, { Task } from './components/TaskDashboard';
+import TaskDashboard, { Task, TypeFilter } from './components/TaskDashboard';
 
 function App() {
   const [useListTask, setListTask] = useState<Task[]>([]);
+  const [useListTaskFiltered, setListTaskFiltered] = useState<Task[]>([]);
   const [useEdit, setEdit] = useState<boolean>();
   const [useEditTask, setEditTask] = useState(-1);
   const [useTextTask, setTextTask] = useState('');
+  const [useFilterAll, setFilterAll] = useState(true);
+  const [useFilterComplete, setFilterComplete] = useState(false);
 
   const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     setTextTask(event.target.value);
   };
 
-  const clearInput = () => {
+  const refreshListTask = () => {
+    let newList: Task[] = [];
+
+    if (useFilterComplete) {
+      newList = useListTask.filter((task: Task) => task.completeTask === true);
+      setListTaskFiltered(newList);
+    } else {
+      setListTaskFiltered(useListTask);
+    }
+  };
+
+  const handleChangeTypeFilter = (type: TypeFilter) => {
+    if (type === 0) {
+      setFilterAll(true);
+      setFilterComplete(false);
+    } else if (type === 1) {
+      setFilterAll(false);
+      setFilterComplete(true);
+    }
+  };
+
+  useEffect(() => {
+    refreshListTask();
+  });
+
+  const resetStates = () => {
     setTextTask('');
+    setEditTask(-1);
+    setEdit(false);
   };
 
   const handleAddTask = (text: string) => {
     const task: Task = {
       id: useListTask.length,
       textTask: text,
-      checkedTask: false,
+      completeTask: false,
     };
     setListTask([...useListTask, task]);
-    clearInput();
-  };
-
-  const fetchTaskChecked = () => {
-    let resultTask: any;
-
-    useListTask.forEach((task) => {
-      if (task.checkedTask) {
-        resultTask = task;
-      }
-    });
-
-    return resultTask;
-  };
-
-  const existTaskChecked = (id: number) => {
-    let haveTaskChecked = false;
-
-    useListTask.forEach((task) => {
-      if (task.checkedTask && id !== task.id) {
-        haveTaskChecked = true;
-      }
-
-      if (task.checkedTask && !haveTaskChecked) {
-        setEditTask(-1);
-      }
-    });
-
-    return haveTaskChecked;
+    setListTaskFiltered([...useListTask, task]);
+    setTextTask('');
   };
 
   const handleChangeCheckBox = (id: number) => {
     const newList = [...useListTask];
 
-    const haveTaskChecked = existTaskChecked(id);
-
-    if (haveTaskChecked || useEdit) return;
-
-    newList[id].checkedTask = !newList[id].checkedTask;
+    newList[id].completeTask = !newList[id].completeTask;
 
     setListTask(newList);
-
-    if (useEditTask === -1) setEditTask(id);
   };
 
   const handleSave = () => {
     const newList = [...useListTask];
 
     newList[useEditTask].textTask = useTextTask;
-    newList[useEditTask].checkedTask = false;
 
     setListTask(newList);
 
-    clearInput();
-
-    handleChangeCheckBox(useEditTask);
-
-    setEditTask(-1);
-
-    setEdit(false);
+    resetStates();
   };
 
-  const handleEdit = () => {
-    if (fetchTaskChecked() === undefined) return;
+  const handleEdit = (id: number) => {
+    if (useEdit) return;
 
     setEdit(true);
 
-    const taskChecked: any = fetchTaskChecked();
-
-    if (taskChecked.length !== undefined) return;
+    const taskChecked: any = useListTask[id];
 
     setTextTask(taskChecked.textTask);
 
     setEditTask(taskChecked.id);
-  };
-
-  const handleEditSave = () => {
-    if (!useEdit) {
-      handleEdit();
-    } else {
-      handleSave();
-    }
   };
 
   const orderArray = (listTask: Task[]) => {
@@ -123,13 +103,13 @@ function App() {
   };
 
   const handleDelete = () => {
-    if (fetchTaskChecked() === undefined) return;
+    if (!useEdit) return;
 
     const newList = [...useListTask];
 
     const listTask = newList.filter((task: Task) => task.id !== useEditTask);
 
-    setEditTask(-1);
+    resetStates();
 
     const listTasksOrder = orderArray(listTask);
 
@@ -145,12 +125,14 @@ function App() {
         handleChangeInput={handleChangeInput}
       />
       <TaskDashboard
-        tasks={useListTask}
+        tasks={useListTaskFiltered}
         handleAddTask={setListTask}
-        handleEditSave={handleEditSave}
+        handleSave={handleSave}
         handleChangeCheckBox={handleChangeCheckBox}
+        handleEditClick={handleEdit}
         useEdit={useEdit}
         handleDelete={handleDelete}
+        handleChangeTypeFilter={handleChangeTypeFilter}
       />
     </div>
   );
