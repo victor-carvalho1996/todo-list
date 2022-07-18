@@ -1,6 +1,16 @@
 import React from 'react';
 
-function TaskDashboard() {
+export interface Task {
+  id: number;
+  textTask: string;
+}
+
+interface TaskList {
+  tasks: Task[];
+}
+
+function TaskDashboard(props: TaskList) {
+  const { tasks } = props;
   return (
     <>
       <div className="filters btn-group stack-exception">
@@ -26,12 +36,16 @@ function TaskDashboard() {
         aria-labelledby="list-heading"
       >
         <li className="todo stack-small">
-          <div className="c-cb">
-            <input id="todo-0" type="checkbox" />
-            <label className="todo-label" htmlFor="todo-0">
-              Model Task
-            </label>
-          </div>
+          {tasks.map((task: Task) => {
+            return (
+              <div className="c-cb">
+                <input id={task.id.toString()} type="checkbox" />
+                <label className="todo-label" htmlFor={task.id.toString()}>
+                  {task.textTask}
+                </label>
+              </div>
+            );
+          })}
           <div className="btn-group">
             <button type="button" className="btn">
               save
