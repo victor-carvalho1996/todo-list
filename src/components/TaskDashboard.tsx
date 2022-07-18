@@ -9,6 +9,7 @@ export interface Task {
 export enum TypeFilter {
   All,
   Complete,
+  Active,
 }
 
 function TaskDashboard({
@@ -35,7 +36,12 @@ function TaskDashboard({
         </button>
         <button type="button" className="btn toggle-btn">
           <span className="visually-hidden">Show </span>
-          <button type="button">Active</button>
+          <button
+            type="button"
+            onClick={() => handleChangeTypeFilter(TypeFilter.Active)}
+          >
+            Active
+          </button>
           <span className="visually-hidden"> tasks</span>
         </button>
         <button type="button" className="btn toggle-btn">

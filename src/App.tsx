@@ -12,6 +12,7 @@ function App() {
   const [useTextTask, setTextTask] = useState('');
   const [useFilterAll, setFilterAll] = useState(true);
   const [useFilterComplete, setFilterComplete] = useState(false);
+  const [useFilterActive, setFilterActive] = useState(false);
 
   const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -24,6 +25,9 @@ function App() {
     if (useFilterComplete) {
       newList = useListTask.filter((task: Task) => task.completeTask === true);
       setListTaskFiltered(newList);
+    } else if (useFilterActive) {
+      newList = useListTask.filter((task: Task) => task.completeTask === false);
+      setListTaskFiltered(newList);
     } else {
       setListTaskFiltered(useListTask);
     }
@@ -32,10 +36,16 @@ function App() {
   const handleChangeTypeFilter = (type: TypeFilter) => {
     if (type === 0) {
       setFilterAll(true);
+      setFilterActive(false);
       setFilterComplete(false);
     } else if (type === 1) {
       setFilterAll(false);
+      setFilterActive(false);
       setFilterComplete(true);
+    } else if (type === 2) {
+      setFilterAll(false);
+      setFilterComplete(false);
+      setFilterActive(true);
     }
   };
 
