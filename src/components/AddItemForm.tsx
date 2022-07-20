@@ -7,7 +7,7 @@ interface IProps {
 function AddItemForm(props: IProps) {
   const { handleAdd } = props;
   const domInputId = 'new-todo-input';
-  const [useTextTask, setTextTask] = useState<string>('');
+  const [taskText, setTextTask] = useState<string>('');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -31,7 +31,7 @@ function AddItemForm(props: IProps) {
       />
       <button
         type="button"
-        onClick={() => handleAdd(useTextTask)}
+        onClick={() => handleAdd(taskText)}
         className="btn btn__primary btn__lg"
       >
         Add Task

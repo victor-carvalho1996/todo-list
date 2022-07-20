@@ -1,12 +1,8 @@
 import React from 'react';
-
-export interface Task {
-  id: number;
-  textTask: string;
-}
+import { ITaskList } from './types';
 
 interface TaskList {
-  tasks: Task[];
+  tasks: ITaskList[];
 }
 
 function TaskDashboard(props: TaskList) {
@@ -36,12 +32,15 @@ function TaskDashboard(props: TaskList) {
         aria-labelledby="list-heading"
       >
         <li className="todo stack-small">
-          {tasks.map((task: Task) => {
+          {Object.keys(tasks).map((element: any) => {
             return (
               <div className="c-cb">
-                <input id={task.id.toString()} type="checkbox" />
-                <label className="todo-label" htmlFor={task.id.toString()}>
-                  {task.textTask}
+                <input id={tasks[element].id.toString()} type="checkbox" />
+                <label
+                  className="todo-label"
+                  htmlFor={tasks[element].id.toString()}
+                >
+                  {tasks[element].textTask}
                 </label>
               </div>
             );
