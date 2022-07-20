@@ -8,11 +8,14 @@ import TaskDashboard from './components/TaskDashboard';
 
 function App() {
   const [taskList, setListTask] = useState<ITaskList[]>([]);
+  const [taskText, setTextTask] = useState<string>('');
+  const [isEdit, setEdit] = useState(false);
+  const [idEdit, setIdEdit] = useState<string>('');
 
   const handleAddTask = (text: string) => {
     const newList: any = { ...taskList };
 
-    const uniqueId: string = uuidv4();
+    const uniqueId: any = uuidv4();
 
     newList[uniqueId] = {
       id: uniqueId,
@@ -21,13 +24,60 @@ function App() {
     };
 
     setListTask(newList);
+
+    setTextTask('');
+  };
+
+  const handleClickEdit = (id: any) => {
+    const list: ITaskList[] = { ...taskList };
+
+    setEdit(true);
+
+    setIdEdit(id);
+
+    const task: any = list[id];
+
+    setTextTask(task.textTask);
+  };
+
+  const resetStates = () => {
+    setEdit(false);
+
+    setIdEdit('');
+
+    setTextTask('');
+  };
+
+  const saveTask = () => {
+    const newList: any = { ...taskList };
+
+    newList[idEdit].textTask = taskText;
+
+    setListTask(newList);
+
+    resetStates();
+  };
+
+  const handleSaveEdit = () => {
+    if (isEdit) {
+      saveTask();
+    }
   };
 
   return (
     <div className="todoapp stack-large">
       <Title />
-      <AddItemForm handleAdd={handleAddTask} />
-      <TaskDashboard tasks={taskList} />
+      <AddItemForm
+        handleAdd={handleAddTask}
+        setTextTask={setTextTask}
+        taskText={taskText}
+      />
+      <TaskDashboard
+        tasks={taskList}
+        handleClickEdit={handleClickEdit}
+        isEdit={isEdit}
+        handleSaveEdit={handleSaveEdit}
+      />
     </div>
   );
 }

@@ -3,10 +3,13 @@ import { ITaskList } from './types';
 
 interface TaskList {
   tasks: ITaskList[];
+  handleClickEdit: (id: string) => void;
+  isEdit: boolean;
+  handleSaveEdit: () => void;
 }
 
 function TaskDashboard(props: TaskList) {
-  const { tasks } = props;
+  const { tasks, handleClickEdit, isEdit, handleSaveEdit } = props;
   return (
     <>
       <div className="filters btn-group stack-exception">
@@ -38,7 +41,9 @@ function TaskDashboard(props: TaskList) {
                 <input id={tasks[element].id.toString()} type="checkbox" />
                 <label
                   className="todo-label"
-                  htmlFor={tasks[element].id.toString()}
+                  onDoubleClick={() =>
+                    handleClickEdit(tasks[element].id.toString())
+                  }
                 >
                   {tasks[element].textTask}
                 </label>
@@ -46,8 +51,8 @@ function TaskDashboard(props: TaskList) {
             );
           })}
           <div className="btn-group">
-            <button type="button" className="btn">
-              save
+            <button type="button" className="btn" onClick={handleSaveEdit}>
+              {isEdit ? 'Save' : 'Edit'}
               <span className="visually-hidden" />
             </button>
             <button type="button" className="btn btn__danger">

@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 interface IProps {
   handleAdd: (textTask: string) => void;
+  setTextTask: (text: string) => void;
+  taskText: string;
 }
 
 function AddItemForm(props: IProps) {
-  const { handleAdd } = props;
+  const { handleAdd, setTextTask, taskText } = props;
   const domInputId = 'new-todo-input';
-  const [taskText, setTextTask] = useState<string>('');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -28,6 +29,7 @@ function AddItemForm(props: IProps) {
         name={domInputId}
         onChange={handleChange}
         autoComplete="off"
+        value={taskText}
       />
       <button
         type="button"
