@@ -5,8 +5,7 @@ interface TaskList {
   taskList: Task[];
 }
 
-function TaskDashboard(props: TaskList) {
-  const { taskList } = props;
+function TaskDashboard({ taskList }: TaskList) {
   return (
     <>
       <div className="filters btn-group stack-exception">
