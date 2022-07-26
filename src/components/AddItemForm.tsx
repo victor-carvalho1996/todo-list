@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-function AddItemForm() {
+interface IProps {
+  handleAdd: (textTask: string) => void;
+}
+
+function AddItemForm({ handleAdd }: IProps) {
   const domInputId = 'new-todo-input';
+  const [taskText, setTaskText] = useState<string>('');
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    setTaskText(event.target.value);
+  };
+
   return (
     <form>
       <h2 className="label-wrapper">
@@ -14,9 +25,14 @@ function AddItemForm() {
         id={domInputId}
         className="input input__lg"
         name={domInputId}
+        onChange={handleChange}
         autoComplete="off"
       />
-      <button type="button" className="btn btn__primary btn__lg">
+      <button
+        type="button"
+        onClick={() => handleAdd(taskText)}
+        className="btn btn__primary btn__lg"
+      >
         Add Task
       </button>
     </form>
