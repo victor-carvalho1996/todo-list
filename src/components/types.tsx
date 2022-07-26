@@ -3,7 +3,3 @@ export interface Task {
   textTask: string;
   taskComplete: boolean;
 }
-
-export interface ITaskList {
-  [value: string]: Task;
-}

@@ -4,14 +4,13 @@ interface IProps {
   handleAdd: (textTask: string) => void;
 }
 
-function AddItemForm(props: IProps) {
-  const { handleAdd } = props;
+function AddItemForm({ handleAdd }: IProps) {
   const domInputId = 'new-todo-input';
-  const [taskText, setTextTask] = useState<string>('');
+  const [taskText, setTaskText] = useState<string>('');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
-    setTextTask(event.target.value);
+    setTaskText(event.target.value);
   };
 
   return (
