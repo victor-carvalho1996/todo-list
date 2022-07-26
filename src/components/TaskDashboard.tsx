@@ -1,11 +1,11 @@
 import React from 'react';
 import { Task } from './types';
 
-interface TaskList {
+interface IProps {
   taskList: Task[];
 }
 
-function TaskDashboard({ taskList }: TaskList) {
+function TaskDashboard({ taskList }: IProps) {
   return (
     <>
       <div className="filters btn-group stack-exception">
@@ -31,7 +31,7 @@ function TaskDashboard({ taskList }: TaskList) {
         aria-labelledby="list-heading"
       >
         <li className="todo stack-small">
-          {taskList.map((task: Task) => {
+          {taskList.map((task) => {
             return (
               <div className="c-cb">
                 <input id={task.id} type="checkbox" />
