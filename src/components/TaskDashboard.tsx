@@ -3,9 +3,13 @@ import { Task } from './types';
 
 interface IProps {
   taskList: Task[];
+  handleClickEdit: (id: string) => void;
+  isEdit: boolean;
+  handleSaveEdit: () => void;
 }
 
-function TaskDashboard({ taskList }: IProps) {
+function TaskDashboard(props: IProps) {
+  const { taskList, handleClickEdit, isEdit, handleSaveEdit } = props;
   return (
     <>
       <div className="filters btn-group stack-exception">
@@ -31,19 +35,22 @@ function TaskDashboard({ taskList }: IProps) {
         aria-labelledby="list-heading"
       >
         <li className="todo stack-small">
-          {taskList.map((task) => {
+          {taskList.map((task: Task) => {
             return (
               <div className="c-cb">
                 <input id={task.id} type="checkbox" />
-                <label className="todo-label" htmlFor={task.id}>
+                <label
+                  className="todo-label"
+                  onDoubleClick={() => handleClickEdit(task.id)}
+                >
                   {task.textTask}
                 </label>
               </div>
             );
           })}
           <div className="btn-group">
-            <button type="button" className="btn">
-              save
+            <button type="button" className="btn" onClick={handleSaveEdit}>
+              {isEdit ? 'Save' : 'Edit'}
               <span className="visually-hidden" />
             </button>
             <button type="button" className="btn btn__danger">
