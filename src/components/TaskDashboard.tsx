@@ -4,12 +4,12 @@ import { Task } from './types';
 interface IProps {
   taskList: Task[];
   selectedTask: Task | undefined;
-  handleClickEdit: (id: string) => void;
-  handleEdit: () => void;
+  startEditing: (id: string) => void;
+  editTask: () => void;
 }
 
 function TaskDashboard(props: IProps) {
-  const { taskList, selectedTask, handleClickEdit, handleEdit } = props;
+  const { taskList, selectedTask, startEditing, editTask } = props;
   return (
     <>
       <div className="filters btn-group stack-exception">
@@ -41,7 +41,7 @@ function TaskDashboard(props: IProps) {
                 <input id={task.id} type="checkbox" />
                 <label
                   className="todo-label"
-                  onDoubleClick={() => handleClickEdit(task.id)}
+                  onDoubleClick={() => startEditing(task.id)}
                 >
                   {task.textTask}
                 </label>
@@ -53,7 +53,7 @@ function TaskDashboard(props: IProps) {
               type="button"
               className="btn"
               onClick={() => {
-                handleEdit();
+                editTask();
               }}
             >
               {selectedTask !== undefined ? 'Save' : 'Edit'}

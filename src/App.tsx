@@ -11,12 +11,6 @@ function App() {
   const [taskText, setTaskText] = useState<string>('');
   const [selectedTask, setSelectedTask] = useState<Task | undefined>();
 
-  const resetStates = () => {
-    setSelectedTask(undefined);
-
-    setTaskText('');
-  };
-
   const addTask = (text: string) => {
     const newTask: Task = {
       id: uuidv4(),
@@ -25,18 +19,17 @@ function App() {
     };
 
     setTaskList([...taskList, newTask]);
-
     setTaskText('');
   };
 
-  const clickEdit = (id: string) => {
-    const taskToEdit: Task[] = taskList.filter((task: Task) => {
+  const startEditing = (id: string) => {
+    const taskToEdit: Task | undefined = taskList.find((task: Task) => {
       return task.id === id;
     });
 
-    setSelectedTask(taskToEdit[0]);
-
-    setTaskText(taskToEdit[0].textTask);
+    if (taskToEdit === undefined) return;
+    setSelectedTask(taskToEdit);
+    setTaskText(taskToEdit.textTask);
   };
 
   const editTask = () => {
@@ -47,7 +40,8 @@ function App() {
         return task;
       }),
     );
-    resetStates();
+    setSelectedTask(undefined);
+    setTaskText('');
   };
 
   return (
@@ -61,8 +55,8 @@ function App() {
       <TaskDashboard
         taskList={taskList}
         selectedTask={selectedTask}
-        handleClickEdit={clickEdit}
-        handleEdit={editTask}
+        startEditing={startEditing}
+        editTask={editTask}
       />
     </div>
   );
