@@ -9,13 +9,10 @@ import AddItemForm from './components/AddItemForm';
 function App() {
   const [taskList, setTaskList] = useState<Task[]>([]);
   const [taskText, setTaskText] = useState<string>('');
-  const [isEdit, setIsEdit] = useState<boolean>(false);
-  const [idEdit, setIdEdit] = useState<string>('');
+  const [selectedTask, setSelectedTask] = useState<Task | undefined>();
 
   const resetStates = () => {
-    setIsEdit(false);
-
-    setIdEdit('');
+    setSelectedTask(undefined);
 
     setTaskText('');
   };
@@ -37,32 +34,20 @@ function App() {
       return task.id === id;
     });
 
-    setIsEdit(true);
-
-    setIdEdit(id);
+    setSelectedTask(taskToEdit[0]);
 
     setTaskText(taskToEdit[0].textTask);
   };
 
-  const saveTask = () => {
-    taskList.map((task: Task) => {
-      const taskEdit: Task = task;
-      if (taskEdit.id === idEdit) {
-        taskEdit.textTask = taskText;
-      }
-
-      return taskEdit;
-    });
-
-    setTaskList(taskList);
-
+  const editTask = () => {
+    setTaskList(
+      taskList.map((task) => {
+        if (task.id === selectedTask?.id)
+          return { ...task, textTask: taskText };
+        return task;
+      }),
+    );
     resetStates();
-  };
-
-  const saveEdit = () => {
-    if (isEdit) {
-      saveTask();
-    }
   };
 
   return (
@@ -75,9 +60,9 @@ function App() {
       />
       <TaskDashboard
         taskList={taskList}
+        selectedTask={selectedTask}
         handleClickEdit={clickEdit}
-        isEdit={isEdit}
-        handleSaveEdit={saveEdit}
+        handleEdit={editTask}
       />
     </div>
   );

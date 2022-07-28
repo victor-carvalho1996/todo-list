@@ -3,13 +3,13 @@ import { Task } from './types';
 
 interface IProps {
   taskList: Task[];
+  selectedTask: Task | undefined;
   handleClickEdit: (id: string) => void;
-  isEdit: boolean;
-  handleSaveEdit: () => void;
+  handleEdit: () => void;
 }
 
 function TaskDashboard(props: IProps) {
-  const { taskList, handleClickEdit, isEdit, handleSaveEdit } = props;
+  const { taskList, selectedTask, handleClickEdit, handleEdit } = props;
   return (
     <>
       <div className="filters btn-group stack-exception">
@@ -49,8 +49,14 @@ function TaskDashboard(props: IProps) {
             );
           })}
           <div className="btn-group">
-            <button type="button" className="btn" onClick={handleSaveEdit}>
-              {isEdit ? 'Save' : 'Edit'}
+            <button
+              type="button"
+              className="btn"
+              onClick={() => {
+                handleEdit();
+              }}
+            >
+              {selectedTask !== undefined ? 'Save' : 'Edit'}
               <span className="visually-hidden" />
             </button>
             <button type="button" className="btn btn__danger">
