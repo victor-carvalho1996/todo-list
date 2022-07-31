@@ -108,6 +108,8 @@ body {
   color: #fff;
   background-color: #ca3c3c;
   border-color: #bd2130;
+  width: 150px;
+  float: right;
 }
 .btn__filter {
   border-color: lightgrey;

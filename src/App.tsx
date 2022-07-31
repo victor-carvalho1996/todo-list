@@ -44,6 +44,16 @@ function App() {
     setTaskText('');
   };
 
+  const deleteTask = (id: string) => {
+    setTaskList(
+      taskList.filter((task) => {
+        return task.id !== id;
+      }),
+    );
+    setSelectedTask(undefined);
+    setTaskText('');
+  };
+
   return (
     <div className="todoapp stack-large">
       <Title />
@@ -57,6 +67,7 @@ function App() {
         selectedTask={selectedTask}
         startEditing={startEditing}
         editTask={editTask}
+        deleteTask={deleteTask}
       />
     </div>
   );

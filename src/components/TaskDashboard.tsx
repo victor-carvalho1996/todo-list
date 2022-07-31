@@ -6,10 +6,11 @@ interface IProps {
   selectedTask: Task | undefined;
   startEditing: (id: string) => void;
   editTask: () => void;
+  deleteTask: (id: string) => void;
 }
 
 function TaskDashboard(props: IProps) {
-  const { taskList, selectedTask, startEditing, editTask } = props;
+  const { taskList, selectedTask, startEditing, editTask, deleteTask } = props;
   return (
     <>
       <div className="filters btn-group stack-exception">
@@ -45,6 +46,13 @@ function TaskDashboard(props: IProps) {
                 >
                   {task.textTask}
                 </label>
+                <button
+                  onClick={() => deleteTask(task.id)}
+                  type="button"
+                  className="btn btn__danger"
+                >
+                  Delete <span className="visually-hidden" />
+                </button>
               </div>
             );
           })}
@@ -58,9 +66,6 @@ function TaskDashboard(props: IProps) {
             >
               {selectedTask !== undefined ? 'Save' : 'Edit'}
               <span className="visually-hidden" />
-            </button>
-            <button type="button" className="btn btn__danger">
-              Delete <span className="visually-hidden" />
             </button>
           </div>
         </li>
