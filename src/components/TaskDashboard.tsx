@@ -31,21 +31,32 @@ function TaskDashboard(props: IProps) {
         </button>
       </div>
       <h2 id="list-heading">Tasks remaining</h2>
-      <ul
-        className="todo-list stack-large stack-exception"
-        aria-labelledby="list-heading"
-      >
-        <li className="todo stack-small">
-          {taskList.map((task: Task) => {
-            return (
+      {taskList.map((task: Task) => {
+        return (
+          <ul
+            className="todo-list stack-large stack-exception"
+            aria-labelledby="list-heading"
+          >
+            <li className="todo stack-small">
               <div className="c-cb">
                 <input id={task.id} type="checkbox" />
-                <label
-                  className="todo-label"
-                  onDoubleClick={() => startEditing(task.id)}
-                >
+                <label className="todo-label" htmlFor={task.id}>
                   {task.textTask}
                 </label>
+              </div>
+              <div className="btn-group">
+                <button
+                  type="button"
+                  className="btn"
+                  onClick={() =>
+                    selectedTask?.id === task.id
+                      ? editTask()
+                      : startEditing(task.id)
+                  }
+                >
+                  {selectedTask?.id === task.id ? 'Save' : 'Edit'}
+                  <span className="visually-hidden" />
+                </button>
                 <button
                   onClick={() => deleteTask(task.id)}
                   type="button"
@@ -54,22 +65,10 @@ function TaskDashboard(props: IProps) {
                   Delete <span className="visually-hidden" />
                 </button>
               </div>
-            );
-          })}
-          <div className="btn-group">
-            <button
-              type="button"
-              className="btn"
-              onClick={() => {
-                editTask();
-              }}
-            >
-              {selectedTask !== undefined ? 'Save' : 'Edit'}
-              <span className="visually-hidden" />
-            </button>
-          </div>
-        </li>
-      </ul>
+            </li>
+          </ul>
+        );
+      })}
     </>
   );
 }
