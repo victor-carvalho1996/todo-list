@@ -31,12 +31,12 @@ function TaskDashboard(props: IProps) {
         </button>
       </div>
       <h2 id="list-heading">Tasks remaining</h2>
-      {taskList.map((task: Task) => {
-        return (
-          <ul
-            className="todo-list stack-large stack-exception"
-            aria-labelledby="list-heading"
-          >
+      <ul
+        className="todo-list stack-large stack-exception"
+        aria-labelledby="list-heading"
+      >
+        {taskList.map((task: Task) => {
+          return (
             <li className="todo stack-small">
               <div className="c-cb">
                 <input id={task.id} type="checkbox" />
@@ -66,9 +66,9 @@ function TaskDashboard(props: IProps) {
                 </button>
               </div>
             </li>
-          </ul>
-        );
-      })}
+          );
+        })}
+      </ul>
     </>
   );
 }
