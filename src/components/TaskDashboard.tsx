@@ -6,10 +6,11 @@ interface IProps {
   selectedTask: Task | undefined;
   startEditing: (id: string) => void;
   editTask: () => void;
+  deleteTask: (id: string) => void;
 }
 
 function TaskDashboard(props: IProps) {
-  const { taskList, selectedTask, startEditing, editTask } = props;
+  const { taskList, selectedTask, startEditing, editTask, deleteTask } = props;
   return (
     <>
       <div className="filters btn-group stack-exception">
@@ -34,36 +35,39 @@ function TaskDashboard(props: IProps) {
         className="todo-list stack-large stack-exception"
         aria-labelledby="list-heading"
       >
-        <li className="todo stack-small">
-          {taskList.map((task: Task) => {
-            return (
+        {taskList.map((task: Task) => {
+          return (
+            <li className="todo stack-small">
               <div className="c-cb">
                 <input id={task.id} type="checkbox" />
-                <label
-                  className="todo-label"
-                  onDoubleClick={() => startEditing(task.id)}
-                >
+                <label className="todo-label" htmlFor={task.id}>
                   {task.textTask}
                 </label>
               </div>
-            );
-          })}
-          <div className="btn-group">
-            <button
-              type="button"
-              className="btn"
-              onClick={() => {
-                editTask();
-              }}
-            >
-              {selectedTask !== undefined ? 'Save' : 'Edit'}
-              <span className="visually-hidden" />
-            </button>
-            <button type="button" className="btn btn__danger">
-              Delete <span className="visually-hidden" />
-            </button>
-          </div>
-        </li>
+              <div className="btn-group">
+                <button
+                  type="button"
+                  className="btn"
+                  onClick={() =>
+                    selectedTask?.id === task.id
+                      ? editTask()
+                      : startEditing(task.id)
+                  }
+                >
+                  {selectedTask?.id === task.id ? 'Save' : 'Edit'}
+                  <span className="visually-hidden" />
+                </button>
+                <button
+                  onClick={() => deleteTask(task.id)}
+                  type="button"
+                  className="btn btn__danger"
+                >
+                  Delete <span className="visually-hidden" />
+                </button>
+              </div>
+            </li>
+          );
+        })}
       </ul>
     </>
   );
