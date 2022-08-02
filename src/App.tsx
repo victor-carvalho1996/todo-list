@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
-import { Task } from '@components/types';
 import { v4 as uuidv4 } from 'uuid';
 import TaskDashboard from './components/TaskDashboard';
 import Title from './components/Title';
 import AddItemForm from './components/AddItemForm';
+import { StateTask, Task } from './components/types';
 
 function App() {
   const [taskList, setTaskList] = useState<Task[]>([]);
   const [taskText, setTaskText] = useState<string>('');
   const [selectedTask, setSelectedTask] = useState<Task | undefined>();
+  const [filter, setFilter] = useState<StateTask>(StateTask.ALL);
+  const [taskToShow, setTaskToShow] = useState<Task[]>([]);
 
   const addTask = (text: string) => {
     const newTask: Task = {
@@ -54,6 +56,37 @@ function App() {
     setTaskText('');
   };
 
+  const checkTask = (id: string) => {
+    setTaskList(
+      taskList.map((task) => {
+        if (task.id === id) {
+          return { ...task, taskComplete: !task.taskComplete };
+        }
+        return task;
+      }),
+    );
+  };
+
+  const filterTasks = () => {
+    if (filter === StateTask.COMPLETE) {
+      return setTaskToShow(
+        taskList.filter((task) => task.taskComplete === true),
+      );
+    }
+
+    if (filter === StateTask.ACTIVE) {
+      return setTaskToShow(
+        taskList.filter((task) => task.taskComplete === false),
+      );
+    }
+
+    return setTaskToShow(taskList);
+  };
+
+  useEffect(() => {
+    filterTasks();
+  });
+
   return (
     <div className="todoapp stack-large">
       <Title />
@@ -63,11 +96,13 @@ function App() {
         taskText={taskText}
       />
       <TaskDashboard
-        taskList={taskList}
+        taskToShow={taskToShow}
         selectedTask={selectedTask}
         startEditing={startEditing}
         editTask={editTask}
         deleteTask={deleteTask}
+        checkTask={checkTask}
+        setFilter={setFilter}
       />
     </div>
   );

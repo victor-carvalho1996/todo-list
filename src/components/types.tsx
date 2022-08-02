@@ -3,3 +3,9 @@ export interface Task {
   textTask: string;
   taskComplete: boolean;
 }
+
+export enum StateTask {
+  ALL,
+  COMPLETE,
+  ACTIVE,
+}
