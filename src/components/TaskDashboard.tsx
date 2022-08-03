@@ -1,6 +1,6 @@
 import React from 'react';
 import TaskItem from './TaskItem';
-import { StateTask, Task } from './types';
+import { TypeFilterTask, Task } from './types';
 
 interface IProps {
   taskToShow: Task[];
@@ -9,7 +9,7 @@ interface IProps {
   editTask: () => void;
   deleteTask: (id: string) => void;
   checkTask: (id: string) => void;
-  setFilter: (stateTask: StateTask) => void;
+  setFilter: (typeFilterTask: TypeFilterTask) => void;
 }
 
 function TaskDashboard(props: IProps) {
@@ -27,7 +27,7 @@ function TaskDashboard(props: IProps) {
       <div className="filters btn-group stack-exception">
         <button
           type="button"
-          onClick={() => setFilter(StateTask.ALL)}
+          onClick={() => setFilter(TypeFilterTask.ALL)}
           className="btn toggle-btn"
         >
           <span className="visually-hidden">Show </span>
@@ -36,7 +36,7 @@ function TaskDashboard(props: IProps) {
         </button>
         <button
           type="button"
-          onClick={() => setFilter(StateTask.ACTIVE)}
+          onClick={() => setFilter(TypeFilterTask.ACTIVE)}
           className="btn toggle-btn"
         >
           <span className="visually-hidden">Show </span>
@@ -45,7 +45,7 @@ function TaskDashboard(props: IProps) {
         </button>
         <button
           type="button"
-          onClick={() => setFilter(StateTask.COMPLETE)}
+          onClick={() => setFilter(TypeFilterTask.COMPLETE)}
           className="btn toggle-btn"
         >
           <span className="visually-hidden">Show </span>
