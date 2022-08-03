@@ -4,7 +4,7 @@ export interface Task {
   taskComplete: boolean;
 }
 
-export enum TypeFilterTask {
+export enum FilterCases {
   ALL,
   COMPLETE,
   ACTIVE,

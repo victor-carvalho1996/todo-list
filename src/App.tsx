@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import { v4 as uuidv4 } from 'uuid';
 import TaskDashboard from './components/TaskDashboard';
 import Title from './components/Title';
 import AddItemForm from './components/AddItemForm';
-import { TypeFilterTask, Task } from './components/types';
+import { Task } from './components/types';
 
 function App() {
   const [taskList, setTaskList] = useState<Task[]>([]);
   const [taskText, setTaskText] = useState<string>('');
   const [selectedTask, setSelectedTask] = useState<Task | undefined>();
-  const [filter, setFilter] = useState<TypeFilterTask>(TypeFilterTask.ALL);
-  const [taskToShow, setTaskToShow] = useState<Task[]>([]);
 
   const addTask = (text: string) => {
     const newTask: Task = {
@@ -59,33 +57,12 @@ function App() {
   const checkTask = (id: string) => {
     setTaskList(
       taskList.map((task) => {
-        if (task.id === id) {
-          return { ...task, taskComplete: !task.taskComplete };
-        }
-        return task;
+        return task.id === id
+          ? { ...task, taskComplete: !task.taskComplete }
+          : task;
       }),
     );
   };
-
-  const filterTasks = () => {
-    if (filter === TypeFilterTask.COMPLETE) {
-      return setTaskToShow(
-        taskList.filter((task) => task.taskComplete === true),
-      );
-    }
-
-    if (filter === TypeFilterTask.ACTIVE) {
-      return setTaskToShow(
-        taskList.filter((task) => task.taskComplete === false),
-      );
-    }
-
-    return setTaskToShow(taskList);
-  };
-
-  useEffect(() => {
-    filterTasks();
-  }, [filter, taskList]);
 
   return (
     <div className="todoapp stack-large">
@@ -96,13 +73,12 @@ function App() {
         taskText={taskText}
       />
       <TaskDashboard
-        taskToShow={taskToShow}
+        taskList={taskList}
         selectedTask={selectedTask}
         startEditing={startEditing}
         editTask={editTask}
         deleteTask={deleteTask}
         checkTask={checkTask}
-        setFilter={setFilter}
       />
     </div>
   );

@@ -1,33 +1,53 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import TaskItem from './TaskItem';
-import { TypeFilterTask, Task } from './types';
+import { FilterCases, Task } from './types';
 
 interface IProps {
-  taskToShow: Task[];
+  taskList: Task[];
   selectedTask: Task | undefined;
   startEditing: (id: string) => void;
   editTask: () => void;
   deleteTask: (id: string) => void;
   checkTask: (id: string) => void;
-  setFilter: (typeFilterTask: TypeFilterTask) => void;
 }
 
 function TaskDashboard(props: IProps) {
   const {
-    taskToShow,
+    taskList,
     selectedTask,
     startEditing,
     editTask,
     deleteTask,
     checkTask,
-    setFilter,
   } = props;
+
+  const [filter, setFilter] = useState<FilterCases>(FilterCases.ALL);
+  const [taskToShow, setTaskToShow] = useState<Task[]>([]);
+
+  const filterTasks = () => {
+    if (filter === FilterCases.COMPLETE) {
+      setTaskToShow(taskList.filter((task) => task.taskComplete === true));
+    }
+
+    if (filter === FilterCases.ACTIVE) {
+      setTaskToShow(taskList.filter((task) => task.taskComplete === false));
+    }
+
+    if (filter === FilterCases.ALL) {
+      setTaskToShow(taskList);
+    }
+  };
+
+  useEffect(() => {
+    filterTasks();
+  }, [filter, taskList]);
+
   return (
     <>
       <div className="filters btn-group stack-exception">
         <button
           type="button"
-          onClick={() => setFilter(TypeFilterTask.ALL)}
+          onClick={() => setFilter(FilterCases.ALL)}
           className="btn toggle-btn"
         >
           <span className="visually-hidden">Show </span>
@@ -36,7 +56,7 @@ function TaskDashboard(props: IProps) {
         </button>
         <button
           type="button"
-          onClick={() => setFilter(TypeFilterTask.ACTIVE)}
+          onClick={() => setFilter(FilterCases.ACTIVE)}
           className="btn toggle-btn"
         >
           <span className="visually-hidden">Show </span>
@@ -45,7 +65,7 @@ function TaskDashboard(props: IProps) {
         </button>
         <button
           type="button"
-          onClick={() => setFilter(TypeFilterTask.COMPLETE)}
+          onClick={() => setFilter(FilterCases.COMPLETE)}
           className="btn toggle-btn"
         >
           <span className="visually-hidden">Show </span>
