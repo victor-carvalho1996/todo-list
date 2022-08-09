@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import './App.css';
-import { Task } from '@components/types';
 import { v4 as uuidv4 } from 'uuid';
 import TaskDashboard from './components/TaskDashboard';
 import Title from './components/Title';
 import AddItemForm from './components/AddItemForm';
+import { Task } from './components/types';
 
 function App() {
   const [taskList, setTaskList] = useState<Task[]>([]);
@@ -54,6 +54,16 @@ function App() {
     setTaskText('');
   };
 
+  const checkTask = (id: string) => {
+    setTaskList(
+      taskList.map((task) => {
+        return task.id === id
+          ? { ...task, taskComplete: !task.taskComplete }
+          : task;
+      }),
+    );
+  };
+
   return (
     <div className="todoapp stack-large">
       <Title />
@@ -68,6 +78,7 @@ function App() {
         startEditing={startEditing}
         editTask={editTask}
         deleteTask={deleteTask}
+        checkTask={checkTask}
       />
     </div>
   );

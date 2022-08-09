@@ -1,5 +1,6 @@
-import React from 'react';
-import { Task } from './types';
+import React, { useEffect, useState } from 'react';
+import TaskItem from './TaskItem';
+import { FilterCases, Task } from './types';
 
 interface IProps {
   taskList: Task[];
@@ -7,24 +8,66 @@ interface IProps {
   startEditing: (id: string) => void;
   editTask: () => void;
   deleteTask: (id: string) => void;
+  checkTask: (id: string) => void;
 }
 
 function TaskDashboard(props: IProps) {
-  const { taskList, selectedTask, startEditing, editTask, deleteTask } = props;
+  const {
+    taskList,
+    selectedTask,
+    startEditing,
+    editTask,
+    deleteTask,
+    checkTask,
+  } = props;
+
+  const [filter, setFilter] = useState<FilterCases>(FilterCases.ALL);
+  const [taskToShow, setTaskToShow] = useState<Task[]>([]);
+
+  const filterTasks = () => {
+    if (filter === FilterCases.COMPLETE) {
+      setTaskToShow(taskList.filter((task) => task.taskComplete === true));
+    }
+
+    if (filter === FilterCases.ACTIVE) {
+      setTaskToShow(taskList.filter((task) => task.taskComplete === false));
+    }
+
+    if (filter === FilterCases.ALL) {
+      setTaskToShow(taskList);
+    }
+  };
+
+  useEffect(() => {
+    filterTasks();
+  }, [filter, taskList]);
+
   return (
     <>
       <div className="filters btn-group stack-exception">
-        <button type="button" className="btn toggle-btn">
+        <button
+          type="button"
+          onClick={() => setFilter(FilterCases.ALL)}
+          className="btn toggle-btn"
+        >
           <span className="visually-hidden">Show </span>
           <button type="button">All</button>
           <span className="visually-hidden"> tasks</span>
         </button>
-        <button type="button" className="btn toggle-btn">
+        <button
+          type="button"
+          onClick={() => setFilter(FilterCases.ACTIVE)}
+          className="btn toggle-btn"
+        >
           <span className="visually-hidden">Show </span>
           <button type="button">Active</button>
           <span className="visually-hidden"> tasks</span>
         </button>
-        <button type="button" className="btn toggle-btn">
+        <button
+          type="button"
+          onClick={() => setFilter(FilterCases.COMPLETE)}
+          className="btn toggle-btn"
+        >
           <span className="visually-hidden">Show </span>
           <button type="button">Complete</button>
           <span className="visually-hidden"> tasks</span>
@@ -35,37 +78,16 @@ function TaskDashboard(props: IProps) {
         className="todo-list stack-large stack-exception"
         aria-labelledby="list-heading"
       >
-        {taskList.map((task: Task) => {
+        {taskToShow.map((task: Task) => {
           return (
-            <li className="todo stack-small">
-              <div className="c-cb">
-                <input id={task.id} type="checkbox" />
-                <label className="todo-label" htmlFor={task.id}>
-                  {task.textTask}
-                </label>
-              </div>
-              <div className="btn-group">
-                <button
-                  type="button"
-                  className="btn"
-                  onClick={() =>
-                    selectedTask?.id === task.id
-                      ? editTask()
-                      : startEditing(task.id)
-                  }
-                >
-                  {selectedTask?.id === task.id ? 'Save' : 'Edit'}
-                  <span className="visually-hidden" />
-                </button>
-                <button
-                  onClick={() => deleteTask(task.id)}
-                  type="button"
-                  className="btn btn__danger"
-                >
-                  Delete <span className="visually-hidden" />
-                </button>
-              </div>
-            </li>
+            <TaskItem
+              selectedTask={selectedTask}
+              startEditing={(taskId: string) => startEditing(taskId)}
+              editTask={() => editTask()}
+              deleteTask={(taskId: string) => deleteTask(taskId)}
+              checkTask={(taskId: string) => checkTask(taskId)}
+              task={task}
+            />
           );
         })}
       </ul>
