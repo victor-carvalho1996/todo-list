@@ -1,13 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { ITodoContext } from './types';
+import { TodoContext } from '../ContextTodo';
 
-interface IProps {
-  handleAdd: (textTask: string) => void;
-  setTaskText: (text: string) => void;
-  taskText: string;
-}
-
-function AddItemForm(props: IProps) {
-  const { handleAdd, setTaskText, taskText } = props;
+function AddItemForm() {
+  const { addTask, setTaskText, taskText } = useContext(
+    TodoContext,
+  ) as ITodoContext;
   const domInputId = 'new-todo-input';
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +31,7 @@ function AddItemForm(props: IProps) {
       />
       <button
         type="button"
-        onClick={() => handleAdd(taskText)}
+        onClick={() => addTask(taskText)}
         className="btn btn__primary btn__lg"
       >
         Add Task

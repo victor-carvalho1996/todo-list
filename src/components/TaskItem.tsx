@@ -1,18 +1,14 @@
-import React from 'react';
-import { Task } from './types';
+import React, { useContext } from 'react';
+import { ITodoContext, Task } from './types';
+import { TodoContext } from '../ContextTodo';
 
 interface IProps {
-  selectedTask: Task | undefined;
-  startEditing: (id: string) => void;
-  editTask: () => void;
-  deleteTask: (id: string) => void;
-  checkTask: (id: string) => void;
   task: Task;
 }
 
-function TaskItem(props: IProps) {
-  const { selectedTask, startEditing, editTask, deleteTask, checkTask, task } =
-    props;
+function TaskItem({ task }: IProps) {
+  const { selectedTask, startEditing, editTask, deleteTask, checkTask } =
+    useContext(TodoContext) as ITodoContext;
   return (
     <li className="todo stack-small">
       <div className="c-cb">
