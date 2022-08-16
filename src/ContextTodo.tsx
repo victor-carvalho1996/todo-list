@@ -24,7 +24,7 @@ function ContextTodo({ children }: ProviderProps) {
     setTaskText('');
   };
 
-  const startEditing = (id: string) => {
+  const startEditing = (id: string): boolean | undefined => {
     const taskToEdit: Task | undefined = taskList.find((task: Task) => {
       return task.id === id;
     });
