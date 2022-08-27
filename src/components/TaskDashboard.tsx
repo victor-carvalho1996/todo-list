@@ -1,25 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import TaskItem from './TaskItem';
-import { FilterCases, Task } from './types';
+import { FilterCases, ITodoContext, Task } from './types';
+import { TodoContext } from '../ContextTodo';
 
-interface IProps {
-  taskList: Task[];
-  selectedTask: Task | undefined;
-  startEditing: (id: string) => void;
-  editTask: () => void;
-  deleteTask: (id: string) => void;
-  checkTask: (id: string) => void;
-}
-
-function TaskDashboard(props: IProps) {
-  const {
-    taskList,
-    selectedTask,
-    startEditing,
-    editTask,
-    deleteTask,
-    checkTask,
-  } = props;
+function TaskDashboard() {
+  const { taskList } = useContext(TodoContext) as ITodoContext;
 
   const [filter, setFilter] = useState<FilterCases>(FilterCases.ALL);
   const [taskToShow, setTaskToShow] = useState<Task[]>([]);
@@ -79,16 +64,7 @@ function TaskDashboard(props: IProps) {
         aria-labelledby="list-heading"
       >
         {taskToShow.map((task: Task) => {
-          return (
-            <TaskItem
-              selectedTask={selectedTask}
-              startEditing={(taskId: string) => startEditing(taskId)}
-              editTask={() => editTask()}
-              deleteTask={(taskId: string) => deleteTask(taskId)}
-              checkTask={(taskId: string) => checkTask(taskId)}
-              task={task}
-            />
-          );
+          return <TaskItem task={task} />;
         })}
       </ul>
     </>
